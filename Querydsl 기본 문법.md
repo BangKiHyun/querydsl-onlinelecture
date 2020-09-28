@@ -1,4 +1,4 @@
-# Querydsl
+# Querydsl 기본 문법
 
 ## Querydsl vs JPQL
 
