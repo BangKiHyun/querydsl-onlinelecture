@@ -96,3 +96,62 @@ final List<String> result = queryFactory
 - `필드명.as("적용할 별칭")`: 필드에 별칭 적용
 - `ExpresstionUtils.as(source, alias)`: 필드나, 서브 쿼리에 별칭 적용
 
+</br >
+
+## 동적 쿼리
+
+### BooleanBuilder 사용
+
+~~~java
+BooleanBuilder builder = new BooleanBuilder();
+if (usernameCond != null) {
+    builder.and(member.username.eq(usernameCond));
+}
+
+if (ageCond != null) {
+    builder.and(member.age.eq(ageCond));
+}
+
+return queryFactory
+    .selectFrom(member)
+    .where(builder)
+    .fetch();
+~~~
+
+</br >
+
+### Where 다중 파라미터 사용(권장)
+
+~~~java
+    private List<Member> searchMember2(final String usernameCond, final Integer ageCond) {
+        return queryFactory
+                .selectFrom(member)
+                .where(usernameEq(usernameCond), ageEq(ageCond))
+                .fetch();
+    }
+
+    private BooleanExpression usernameEq(final String usernameCond) {
+        if (usernameCond == null) {
+            return null;
+        }
+        return member.username.eq(usernameCond);
+    }
+
+    private BooleanExpression ageEq(final Integer ageCond) {
+        if (ageCond == null) {
+            return null;
+        }
+        return member.age.eq(ageCond);
+    }
+
+    //조합
+    private BooleanExpression allEq(final String usernameCond, final Integer ageCond) {
+        return usernameEq(usernameCond).and(ageEq(ageCond));
+    }
+~~~
+
+- where 조건에 null 값은 무시됨
+- **메서드를 다른 쿼리에서도 재활용 할 수 있음!!(매우 큰 장점)**
+- 쿼리 자체의 가독성이 높아짐
+- **조합이 가능해짐**
+
