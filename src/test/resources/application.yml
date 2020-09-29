@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: local
+    active: test
   datasource:
     url: jdbc:h2:tcp://localhost/~/querydsl
     username: sa
@@ -14,7 +14,7 @@ spring:
       hibernate:
         #        show_sql: true
         format_sql: true
-#        use_sql_commets: true //실행되는 JPQL볼 수 있음
+        #        use_sql_commets: true //실행되는 JPQL볼 수 있음
         default_batch_fetch_size: 100
     open-in-view: false
 
